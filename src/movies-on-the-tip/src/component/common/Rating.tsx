@@ -11,7 +11,7 @@ type Props = {
 const Rating = ( { rating } : Props ) => {
     const fullStars = Math.floor( rating );
     const halfStars = Math.round( rating ) - fullStars; // either 0 or 1
-    const emptyStars = 10 - ( fullStars + halfStars );
+    const emptyStars = 5 - ( fullStars + halfStars );
 
     return (
         <span className="starColor">

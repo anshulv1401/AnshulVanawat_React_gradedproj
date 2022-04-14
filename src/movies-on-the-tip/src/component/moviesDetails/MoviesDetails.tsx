@@ -1,6 +1,98 @@
+import { useEffect, useState } from "react";
+import { RouteComponentProps } from "react-router";
+import { Alert, Col, Row } from "react-bootstrap";
+import { faClock } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { LoadingStatus } from "../../utils/types";
+import IMovie from "../../model/IMovie";
+import LoadingIndicator from "../common/LoadingIndicator";
+import Rating from "../common/Rating";
+import { getMovieById, getMovieByTitle } from "../../services/movies";
 
-const MoviesDetails = () =>{
-    return <div>Movies Details</div>;
+type Props = {
+    moviesCategory : string,
+    id : string,
+    title : string
+}
+const MoviesDetails = (props : RouteComponentProps<Props>) =>{
+    const [status, setStatus] = useState<LoadingStatus>("LOADING")
+    const [movie, setMovie] = useState<IMovie | null>(null)
+    const [error, setError] = useState<Error | null>(null)
+
+    useEffect( ()=>{
+        const fetchMovie  = async () => {
+            try{
+                if(+props.match.params.id === null){
+                    const data = await getMovieByTitle('/' + props.match.params.moviesCategory, props.match.params.title)
+                    setMovie(data)
+                }
+                else{
+                    const data = await getMovieById('/' + props.match.params.moviesCategory, +props.match.params.id)
+                    setMovie(data)
+                }
+                setStatus("LOADED")
+            }
+            catch (errormsg : any) {
+                setError(errormsg)
+                setStatus("ERROR")
+            }
+        }
+
+        fetchMovie();
+    },[ props.match.params.id ]) 
+
+    let el
+
+    switch ( status) {
+        case "LOADING":
+            el = <LoadingIndicator size="large" message="Loading Libraries. Please wait...."/>;
+            break;
+        case "LOADED":
+            const { id, title, storyline, ratings, posterurl, duration } = movie as IMovie;
+
+            const average = (arr : number[]) => arr.reduce((a,b) => a + b, 0) / arr.length;
+            var rating = parseInt(average(ratings).toFixed(2), 10) / 2;
+            
+            el = (
+                <>
+                    <Row>
+                        <Col xs={12} className="my-2">
+                            <h1>{title}</h1>
+                        </Col>
+                        <Col xs={12} lg={4} className="my-2">
+                            <img src={`${posterurl}`}
+                                alt={title}
+                                className="w-100"
+                            />
+                        </Col>
+                        <Col xs={12} lg={8}>
+                            <div className="fs-5 my-2 ">{storyline}</div>
+                            <Row xs={3} className="text-sm my-2">
+                                <Col>
+                                    <FontAwesomeIcon icon={faClock} />
+                                    <span className="ms-2">{duration}</span>
+                                </Col>
+                                <Col>
+                                    <Rating rating={rating}/>
+                                    {rating} ({ratings.length} rated)
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Row>
+                </>
+            )
+            break;
+
+        case "ERROR":
+            el = (
+                <Alert variant="danger">
+                    {error?.message}
+                </Alert>
+            )
+            break;
+    }
+
+    return el;
 }
 
 export default MoviesDetails

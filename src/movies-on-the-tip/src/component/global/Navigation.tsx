@@ -16,8 +16,8 @@ const Navigation = () => {
                 <Navbar.Collapse id="main-links">
                     <Nav>
                         <Nav.Link to="/movies-in-theaters" as={NavLink}>Movies in theaters</Nav.Link>
-                        <Nav.Link to="/coming-soon" as={NavLink}>Coming Soon</Nav.Link>
-                        <Nav.Link to="/top-rated-indian" as={NavLink}>Top Rated Indian</Nav.Link>
+                        <Nav.Link to="/movies-coming" as={NavLink}>Coming Soon</Nav.Link>
+                        <Nav.Link to="/top-rated-india" as={NavLink}>Top Rated Indian</Nav.Link>
                         <Nav.Link to="/top-rated-movies" as={NavLink}>Top Rated Movies</Nav.Link>
                         <Nav.Link to="/favourite" as={NavLink}>Favourite</Nav.Link>
                         <Nav.Link to="/about" as={NavLink}>About</Nav.Link>
