@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook } from '@fortawesome/free-solid-svg-icons';
+import { faVideoCamera } from '@fortawesome/free-solid-svg-icons';
 
 
 const Navigation = () => {
@@ -9,7 +9,7 @@ const Navigation = () => {
         <Navbar bg="light" expand="lg">
             <Container>
                 <Navbar.Brand to="/" as={NavLink} exact>
-                    <FontAwesomeIcon icon={faBook} className="me-2" />
+                    <FontAwesomeIcon icon={faVideoCamera} className="me-2" />
                     Home
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="main-links" />

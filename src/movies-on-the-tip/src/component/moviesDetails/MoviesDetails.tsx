@@ -42,6 +42,14 @@ const MoviesDetails = (props : RouteComponentProps<Props>) =>{
             el = <LoadingIndicator size="large" message="Loading Libraries. Please wait...."/>;
             break;
         case "LOADED":
+            
+            if (movie === undefined){
+                el = (
+                    <NoMatch/>
+                );
+                break;
+            }
+            
             const { title, storyline, ratings, posterurl, duration } = movie as IMovie;
 
             if (title === undefined){

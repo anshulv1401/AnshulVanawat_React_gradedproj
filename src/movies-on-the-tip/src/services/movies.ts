@@ -23,4 +23,14 @@ const getMovieByTitle = async (
   return response.data[0];
 };
 
-export { getMovies, getMovieById, getMovieByTitle };
+const searchMovieByTitle = async (
+  moviesCategory: string,
+  title: string | number
+) => {
+  const response = await axios.get<IMovie[]>(
+    `${baseUrl}${moviesCategory}/?title_like=${title}`
+  );
+  return response.data[0];
+};
+
+export { getMovies, getMovieById, getMovieByTitle, searchMovieByTitle };
