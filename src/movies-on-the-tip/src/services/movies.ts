@@ -17,10 +17,10 @@ const getMovieByTitle = async (
   moviesCategory: string,
   title: string | number
 ) => {
-  const response = await axios.get<IMovie>(
+  const response = await axios.get<IMovie[]>(
     `${baseUrl}${moviesCategory}/?title=${title}`
   );
-  return response.data;
+  return response.data[0];
 };
 
 export { getMovies, getMovieById, getMovieByTitle };

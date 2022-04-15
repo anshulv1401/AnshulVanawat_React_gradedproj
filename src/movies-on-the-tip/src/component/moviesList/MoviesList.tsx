@@ -42,7 +42,7 @@ class MoviesList extends Component<RouteComponentProps, State> {
                         {
                             movies?.map(
                                 movie => (
-                                    <Col key={movie.id} className="d-flex align-items-stretch my-3">
+                                    <Col key={movie.title} className="d-flex align-items-stretch my-3">
                                         <MovieListItem movie={movie} path={this.props.match.path}/>
                                     </Col>
                                 )

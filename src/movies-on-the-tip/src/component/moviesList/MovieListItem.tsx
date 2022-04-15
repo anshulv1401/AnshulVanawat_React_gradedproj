@@ -16,7 +16,7 @@ const MovieListItem = ( { movie, path } : Props ) => {
 
     var cardText = storyline.length > 100 ? storyline.substring(0, 100) + '...' : storyline;
 
-    var toPath = id === undefined? `${path}?title=${title}` : `${path}/${id}`
+    var toPath = `${path}/${title}`
 
     return (
         <Card style={{ width: '18rem' }}>

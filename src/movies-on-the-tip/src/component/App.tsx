@@ -36,8 +36,7 @@ function App() {
         <Route path="/top-rated-movies" component={MoviesList} exact />
         <Route path="/favourite" component={MoviesList} exact />
         <Route path="/about" component={About} exact />
-        <Route path="/:moviesCategory?title=:title" component={MoviesDetails} exact/>
-        <Route path="/:moviesCategory/:id" component={MoviesDetails} exact/>
+        <Route path="/:moviesCategory/:path" component={MoviesDetails} exact/>
     </Container>
   </>
   );

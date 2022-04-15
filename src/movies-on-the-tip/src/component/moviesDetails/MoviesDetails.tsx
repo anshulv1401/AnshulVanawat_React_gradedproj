@@ -8,11 +8,11 @@ import IMovie from "../../model/IMovie";
 import LoadingIndicator from "../common/LoadingIndicator";
 import Rating from "../common/Rating";
 import { getMovieById, getMovieByTitle } from "../../services/movies";
+import NoMatch from "../global/NoMatch";
 
 type Props = {
     moviesCategory : string,
-    id : string,
-    title : string
+    path : string
 }
 const MoviesDetails = (props : RouteComponentProps<Props>) =>{
     const [status, setStatus] = useState<LoadingStatus>("LOADING")
@@ -22,15 +22,9 @@ const MoviesDetails = (props : RouteComponentProps<Props>) =>{
     useEffect( ()=>{
         const fetchMovie  = async () => {
             try{
-                if(+props.match.params.id === null){
-                    const data = await getMovieByTitle('/' + props.match.params.moviesCategory, props.match.params.title)
-                    setMovie(data)
-                }
-                else{
-                    const data = await getMovieById('/' + props.match.params.moviesCategory, +props.match.params.id)
-                    setMovie(data)
-                }
-                setStatus("LOADED")
+                const data = await getMovieByTitle('/' + props.match.params.moviesCategory, props.match.params.path);
+                setMovie(data);
+                setStatus("LOADED");
             }
             catch (errormsg : any) {
                 setError(errormsg)
@@ -39,17 +33,23 @@ const MoviesDetails = (props : RouteComponentProps<Props>) =>{
         }
 
         fetchMovie();
-    },[ props.match.params.id ]) 
+    },[ props.match.params.path ]) 
 
     let el
 
-    switch ( status) {
+    switch (status) {
         case "LOADING":
             el = <LoadingIndicator size="large" message="Loading Libraries. Please wait...."/>;
             break;
         case "LOADED":
-            const { id, title, storyline, ratings, posterurl, duration } = movie as IMovie;
+            const { title, storyline, ratings, posterurl, duration } = movie as IMovie;
 
+            if (title === undefined){
+                el = (
+                    <NoMatch/>
+                );
+                break;
+            }
             const average = (arr : number[]) => arr.reduce((a,b) => a + b, 0) / arr.length;
             var rating = parseInt(average(ratings).toFixed(2), 10) / 2;
             
