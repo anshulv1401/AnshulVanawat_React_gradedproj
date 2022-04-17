@@ -1,3 +1,5 @@
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Component } from "react";
 import { Alert, Col, Row } from "react-bootstrap";
 import { RouteComponentProps } from "react-router";
@@ -10,16 +12,48 @@ import MovieListItem from "./MovieListItem";
 type State = {
     status: LoadingStatus,
     movies?: IMovie[],
-    error?: Error
+    moviesToShow?: IMovie[],
+    error?: Error,
+    searchString: string,
 }
 
 class MoviesList extends Component<RouteComponentProps, State> {
     state : State = {
-        status: 'LOADING'
+        status: 'LOADING',
+        searchString:''
     };
+    
+    updateValue = (event : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> ) => {
+        const { value } = event.target;
+
+        this.setState(
+            state => {
+                return {
+                    searchString : value
+                }
+            },
+            () => {
+                this.searchMovie(this.state.searchString);
+            }
+        )
+    }
+
+    searchMovie(searchString: string){
+        this.setState({
+            status: 'LOADING'
+        });
+
+        const moviesToShow = this.state.movies?.filter(x =>{
+            return x.title.toLowerCase().includes(searchString.toLowerCase());
+        })
+        this.setState({
+            status: 'LOADED',
+            moviesToShow
+        });
+    }
 
     render() {
-        const { status, movies, error } = this.state;
+        const { status, moviesToShow, error, searchString } = this.state;
 
         let el;
 
@@ -38,17 +72,26 @@ class MoviesList extends Component<RouteComponentProps, State> {
                 break;
             case 'LOADED':
                 el = (
-                    <Row xs={2} md={3} lg={5}>
-                        {
-                            movies?.map(
-                                movie => (
-                                    <Col key={movie.title} className="d-flex align-items-stretch my-3">
-                                        <MovieListItem movie={movie} path={this.props.match.path}/>
-                                    </Col>
+                    <>
+                        <FontAwesomeIcon icon={faSearch} className="me-2" />    
+                        <input 
+                            placeholder='Search movie' 
+                            className='me-2' 
+                            value={searchString}
+                            onChange={this.updateValue}
+                        />
+                        <Row xs={2} md={3} lg={5}>
+                            {
+                                moviesToShow?.map(
+                                    (movie, idx) => (
+                                        <Col key={idx} className="d-flex align-items-stretch my-3">
+                                            <MovieListItem movie={movie} path={this.props.match.path}/>
+                                        </Col>
+                                    )
                                 )
-                            )
-                        }
-                    </Row>
+                            }
+                        </Row>
+                    </>
                 );
 
                 break;
@@ -66,9 +109,11 @@ class MoviesList extends Component<RouteComponentProps, State> {
 
         try {
             const movies = await getMovies(this.props.match.path);
+            const moviesToShow = movies;
             this.setState({
                 status: 'LOADED',
-                movies
+                movies,
+                moviesToShow
             });
         } catch( error ) {
             this.setState({
