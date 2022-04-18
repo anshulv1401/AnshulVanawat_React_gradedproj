@@ -10,35 +10,25 @@ import './App.css';
 import MoviesList from './moviesList/MoviesList';
 import MoviesDetails from './moviesDetails/MoviesDetails';
 import NoMatch from './global/NoMatch';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     <>
-    <Navigation />
-    {/* <Container className="my-4">
-      <Switch>
-          <Route path="/about" component={About} />
-          <Route path="/movies-in-theaters" component={MoviesList} />
-          <Route path="/movies-coming" component={MoviesList} />
-          <Route path="/top-rated-india" component={MoviesList} />
-          <Route path="/top-rated-movies" component={MoviesList} />
-          <Route path="/favourite" component={MoviesList} />
-          <Route path="/movies-in-theaters/:id" component={MoviesList} />
-          <Route path="/" component={Home} />
-      </Switch>
-    </Container> */}
-
-    <Container className="my-4">
-        <Route path="/" component={Home} exact/>
-        <Route path="/movies-in-theaters" component={MoviesList} exact />
-        <Route path="/movies-coming" component={MoviesList} exact />
-        <Route path="/top-rated-india" component={MoviesList} exact />
-        <Route path="/top-rated-movies" component={MoviesList} exact />
-        <Route path="/favourite" component={MoviesList} exact />
-        <Route path="/about" component={About} exact />
-        <Route path="/:moviesCategory/:path" component={MoviesDetails} exact/>
-    </Container>
-  </>
+      <Navigation />
+      <Container className="my-4">
+          <Route path="/" component={Home} exact/>
+          <Route path="/movies-in-theaters" component={MoviesList} exact />
+          <Route path="/movies-coming" component={MoviesList} exact />
+          <Route path="/top-rated-india" component={MoviesList} exact />
+          <Route path="/top-rated-movies" component={MoviesList} exact />
+          <Route path="/favourite" component={MoviesList} exact />
+          <Route path="/about" component={About} exact />
+          <Route path="/:moviesCategory/:path" component={MoviesDetails} exact/>
+      </Container>
+      <ToastContainer/>
+    </>
   );
 }
 

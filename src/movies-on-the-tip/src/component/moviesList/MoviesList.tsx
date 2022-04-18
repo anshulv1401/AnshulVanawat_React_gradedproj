@@ -1,7 +1,7 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Component } from "react";
-import { Alert, Col, Row } from "react-bootstrap";
+import { Alert, Col, Row, Toast, ToastContainer } from "react-bootstrap";
 import { RouteComponentProps } from "react-router";
 import IMovie from "../../model/IMovie";
 import { getMovies } from "../../services/movies";
@@ -15,12 +15,16 @@ type State = {
     moviesToShow?: IMovie[],
     error?: Error,
     searchString: string,
+    show1:boolean
+    show2:boolean
 }
 
 class MoviesList extends Component<RouteComponentProps, State> {
     state : State = {
         status: 'LOADING',
-        searchString:''
+        searchString:'',
+        show1:true,
+        show2:true
     };
     
     updateValue = (event : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> ) => {
@@ -53,7 +57,7 @@ class MoviesList extends Component<RouteComponentProps, State> {
     }
 
     render() {
-        const { status, moviesToShow, error, searchString } = this.state;
+        const { status, moviesToShow, error, searchString, show1, show2 } = this.state;
 
         let el;
 

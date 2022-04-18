@@ -33,4 +33,20 @@ const searchMovieByTitle = async (
   return response.data[0];
 };
 
-export { getMovies, getMovieById, getMovieByTitle, searchMovieByTitle };
+const addMovie = async (moviesCategory: string, movie: IMovie) => {
+  return axios
+    .post<IMovie[]>(`${baseUrl}${moviesCategory}`, movie, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then((response) => response.data);
+};
+
+export {
+  getMovies,
+  getMovieById,
+  getMovieByTitle,
+  searchMovieByTitle,
+  addMovie,
+};
