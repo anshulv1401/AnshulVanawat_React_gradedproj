@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Card } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import IMovie from "../../model/IMovie";
 import { addMovie,  deleteMovieById, getHigestMovieId, getMovieByTitle } from "../../services/movies";
@@ -59,8 +59,14 @@ const MovieListItem = ( { movie, path, onRemove } : Props ) => {
         }
     };
 
+    const history = useHistory();
+  
+    const routeChange = () =>{
+        history.push(toPath);
+    }
+
     return (
-        <Card className="shadow-sm mb-5 bg-white rounded" style={{ width: '18rem' }}>
+        <Card className="shadow-sm mb-5 bg-white rounded" style={{ width: '18rem' }} onClick={routeChange}>
             <Card.Img variant="top" height={350} src={`${posterurl}`} alt={`${title} Movie Poster`}/>
             <Card.Body>
                 <Card.Title className="d-flex justify-content-between">
@@ -70,11 +76,6 @@ const MovieListItem = ( { movie, path, onRemove } : Props ) => {
                             <Rating rating={rating}/>
                             {rating} ({ratings.length} rated)
                         </div>
-                    </div>
-                    <div>
-                        <Link to={toPath} className="btn btn-primary btn-sm">
-                            More
-                        </Link>
                     </div>
                 </Card.Title>
                 <Card.Text>
