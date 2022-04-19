@@ -64,11 +64,13 @@ class MoviesList extends Component<RouteComponentProps<Props>, State> {
             status: 'LOADING'
         });
 
+        const movies = this.state.movies?.filter((movie) => movie.title !== title);
         const moviesToShow = this.state.moviesToShow?.filter((movie) => movie.title !== title);
         
         this.setState({
             status: 'LOADED',
-            moviesToShow
+            moviesToShow,
+            movies
         });
      }
     
@@ -167,7 +169,8 @@ class MoviesList extends Component<RouteComponentProps<Props>, State> {
             this.setState({
                 status: 'LOADED',
                 movies,
-                moviesToShow
+                moviesToShow,
+                searchString:''
             });
         } catch( error ) {
             this.setState({
