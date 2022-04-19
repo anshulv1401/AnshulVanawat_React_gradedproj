@@ -125,7 +125,16 @@ class MoviesList extends Component<RouteComponentProps<Props>, State> {
                     );
                 } else {
                     el = (
-                        <NoData/>
+                        <>
+                            <FontAwesomeIcon icon={faSearch} className="me-2" />    
+                                <input 
+                                    placeholder='Search movie' 
+                                    className='me-2' 
+                                    value={searchString}
+                                    onChange={this.updateValue}
+                                />
+                            <NoData/>
+                        </>
                     );
                 }
 

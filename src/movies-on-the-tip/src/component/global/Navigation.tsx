@@ -1,8 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faVideoCamera } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { faVideoCamera } from '@fortawesome/free-solid-svg-icons';
 
 
 const Navigation = () => {
