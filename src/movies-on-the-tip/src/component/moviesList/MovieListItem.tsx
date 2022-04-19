@@ -1,17 +1,20 @@
-import { MouseEvent, useState } from "react";
-import { Button, Card, Toast, ToastContainer } from "react-bootstrap";
+import { useState } from "react";
+import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import IMovie from "../../model/IMovie";
-import { addMovie } from "../../services/movies";
+import { addMovie,  deleteMovieById, getHigestMovieId, getMovieByTitle } from "../../services/movies";
 import Rating from "../common/Rating";
 
 type Props = {
     movie: IMovie
     path: string
+    onRemove:(title:string) => void
 };
 
-const MovieListItem = ( { movie, path } : Props ) => {
+const MovieListItem = ( { movie, path, onRemove } : Props ) => {
+    const toastTimeout = 2000;
+    const isFavouritePage = path === "/favourite";
 
     const { id, title, storyline, ratings, posterurl } = movie;
 
@@ -25,11 +28,34 @@ const MovieListItem = ( { movie, path } : Props ) => {
     const addMovieToFavourite = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         try {
-            const data = await addMovie("/favourite", movie);
-            toast.success("Successfully added in favourite!", { autoClose: 2000 })
+            const movieByTitle = await getMovieByTitle("/favourite", movie.title);
+            if (movieByTitle !== null){
+                toast.error("Already added in favourite!", { autoClose: toastTimeout })
+                return;
+            }
+
+            const highestId = await getHigestMovieId("/favourite");
+            movie.id = highestId + 1;
+            await addMovie("/favourite", movie);
+            toast.success("Successfully added in favourite!", { autoClose: toastTimeout })
         }
         catch (errormsg : any) {
-            toast.error("Already added in favourite!", { autoClose: 2000 })
+            toast.error("Failed to add the movie!", { autoClose: toastTimeout })
+        }
+    };
+
+    const removeMovieFromFavourite = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        try {
+            if (movie.id === null){
+                toast.warn("Deletion of a movie without id not implemented");
+            }
+            const data = await deleteMovieById("/favourite", movie.id);
+            toast.success("Successfully removed from favourite!", { autoClose: toastTimeout })
+            onRemove(movie.title);
+        }
+        catch (errormsg : any) {
+            toast.error("Failed to remove from favourite", { autoClose: toastTimeout })
         }
     };
 
@@ -56,7 +82,8 @@ const MovieListItem = ( { movie, path } : Props ) => {
                         <strong>Story Line</strong>: {cardText}
                     </span>
                 </Card.Text>
-                <Button onClick={addMovieToFavourite} variant="primary">Add to favourite</Button>
+                <Button hidden={isFavouritePage} onClick={addMovieToFavourite} variant="primary">Add to favourite</Button>
+                <Button hidden={!isFavouritePage} onClick={removeMovieFromFavourite} variant="danger">Remove from favourite</Button>
             </Card.Body>
         </Card>
     );

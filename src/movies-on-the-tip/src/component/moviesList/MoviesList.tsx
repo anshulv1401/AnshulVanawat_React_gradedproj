@@ -56,6 +56,21 @@ class MoviesList extends Component<RouteComponentProps, State> {
         });
     }
 
+    removeMovieFromFavourite = (title:string) => {
+        
+        this.setState({
+            status: 'LOADING'
+        });
+
+        const moviesToShow = this.state.moviesToShow?.filter((movie) => movie.title !== title);
+        
+        this.setState({
+            status: 'LOADED',
+            moviesToShow
+        });
+     }
+    
+
     render() {
         const { status, moviesToShow, error, searchString, show1, show2 } = this.state;
 
@@ -89,7 +104,7 @@ class MoviesList extends Component<RouteComponentProps, State> {
                                 moviesToShow?.map(
                                     (movie, idx) => (
                                         <Col key={idx} className="d-flex align-items-stretch my-3">
-                                            <MovieListItem movie={movie} path={this.props.match.path}/>
+                                            <MovieListItem movie={movie} path={this.props.match.path} onRemove={this.removeMovieFromFavourite}/>
                                         </Col>
                                     )
                                 )
