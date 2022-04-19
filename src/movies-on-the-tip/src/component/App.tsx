@@ -18,14 +18,12 @@ function App() {
     <>
       <Navigation />
       <Container className="my-4">
-          <Route path="/" component={Home} exact/>
-          <Route path="/movies-in-theaters" component={MoviesList} exact />
-          <Route path="/movies-coming" component={MoviesList} exact />
-          <Route path="/top-rated-india" component={MoviesList} exact />
-          <Route path="/top-rated-movies" component={MoviesList} exact />
-          <Route path="/favourite" component={MoviesList} exact />
-          <Route path="/about" component={About} exact />
-          <Route path="/:moviesCategory/:path" component={MoviesDetails} exact/>
+          <Switch>
+            <Route path="/about" component={About}/>
+            <Route path="/:moviesCategory/:path" component={MoviesDetails}/>
+            <Route path="/:moviesCategory" component={MoviesList}/>
+            <Route path="/" component={Home}/>
+          </Switch>
       </Container>
       <ToastContainer/>
     </>

@@ -7,7 +7,7 @@ import { LoadingStatus } from "../../utils/types";
 import IMovie from "../../model/IMovie";
 import LoadingIndicator from "../common/LoadingIndicator";
 import Rating from "../common/Rating";
-import { getMovieById, getMovieByTitle } from "../../services/movies";
+import { getMovieByTitle } from "../../services/movies";
 import NoMatch from "../global/NoMatch";
 
 type Props = {
@@ -22,7 +22,7 @@ const MoviesDetails = (props : RouteComponentProps<Props>) =>{
     useEffect( ()=>{
         const fetchMovie  = async () => {
             try{
-                const data = await getMovieByTitle('/' + props.match.params.moviesCategory, props.match.params.path);
+                const data = await getMovieByTitle(props.match.params.moviesCategory, props.match.params.path);
                 setMovie(data);
                 setStatus("LOADED");
             }
@@ -33,7 +33,7 @@ const MoviesDetails = (props : RouteComponentProps<Props>) =>{
         }
 
         fetchMovie();
-    },[ props.match.params.path ]) 
+    },[ props.match.params.path,  props.match.params.moviesCategory]) 
 
     let el
 
@@ -43,7 +43,7 @@ const MoviesDetails = (props : RouteComponentProps<Props>) =>{
             break;
         case "LOADED":
             
-            if (movie === undefined){
+            if (movie === null){
                 el = (
                     <NoMatch/>
                 );
@@ -52,7 +52,7 @@ const MoviesDetails = (props : RouteComponentProps<Props>) =>{
             
             const { title, storyline, ratings, posterurl, duration } = movie as IMovie;
 
-            if (title === undefined){
+            if (title === null){
                 el = (
                     <NoMatch/>
                 );
@@ -92,11 +92,19 @@ const MoviesDetails = (props : RouteComponentProps<Props>) =>{
             break;
 
         case "ERROR":
-            el = (
-                <Alert variant="danger">
-                    {error?.message}
-                </Alert>
-            )
+            let msg = error?.message??'';
+
+            if (msg?.indexOf("404") > -1){
+                el = (
+                    <NoMatch/>
+                )
+            } else {
+                el = (
+                    <Alert variant="danger">
+                        {error?.message}
+                    </Alert>
+                )                
+            }
             break;
     }
 

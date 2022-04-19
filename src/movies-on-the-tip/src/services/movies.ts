@@ -4,18 +4,13 @@ import IMovie from "../model/IMovie";
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 const getMovies = async (moviesCategory: string) => {
-  const response = await axios.get<IMovie[]>(`${baseUrl}${moviesCategory}`);
-  return response.data;
-};
-
-const getMovieById = async (moviesCategory: string, id: string | number) => {
-  const response = await axios.get<IMovie>(`${baseUrl}${moviesCategory}/${id}`);
+  const response = await axios.get<IMovie[]>(`${baseUrl}/${moviesCategory}`);
   return response.data;
 };
 
 const getMovieByTitle = async (moviesCategory: string, title: string) => {
   const response = await axios.get<IMovie[]>(
-    `${baseUrl}${moviesCategory}/?title=${title}`
+    `${baseUrl}/${moviesCategory}/?title=${title}`
   );
   if (response.data === null || response.data.length === 0) {
     return null;
@@ -25,7 +20,7 @@ const getMovieByTitle = async (moviesCategory: string, title: string) => {
 
 const addMovie = async (moviesCategory: string, movie: IMovie) => {
   return axios
-    .post<IMovie[]>(`${baseUrl}${moviesCategory}`, movie, {
+    .post<IMovie[]>(`${baseUrl}/${moviesCategory}`, movie, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -35,14 +30,14 @@ const addMovie = async (moviesCategory: string, movie: IMovie) => {
 
 const deleteMovieById = async (moviesCategory: string, id: string | number) => {
   const response = await axios.delete<IMovie>(
-    `${baseUrl}${moviesCategory}/${id}`
+    `${baseUrl}/${moviesCategory}/${id}`
   );
   return response.data;
 };
 
 const getHigestMovieId = async (moviesCategory: string) => {
   const response = await axios.get<IMovie[]>(
-    `${baseUrl}${moviesCategory}?_sort=id&_order=desc`
+    `${baseUrl}/${moviesCategory}?_sort=id&_order=desc`
   );
 
   if (response.data === null || response.data.length === 0) {
@@ -53,7 +48,6 @@ const getHigestMovieId = async (moviesCategory: string) => {
 
 export {
   getMovies,
-  getMovieById,
   getMovieByTitle,
   addMovie,
   deleteMovieById,

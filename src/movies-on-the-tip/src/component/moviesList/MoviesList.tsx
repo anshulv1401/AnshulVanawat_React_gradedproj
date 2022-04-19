@@ -7,6 +7,7 @@ import IMovie from "../../model/IMovie";
 import { getMovies } from "../../services/movies";
 import { LoadingStatus } from "../../utils/types";
 import LoadingIndicator from "../common/LoadingIndicator";
+import NoMatch from "../global/NoMatch";
 import MovieListItem from "./MovieListItem";
 
 type State = {
@@ -14,17 +15,17 @@ type State = {
     movies?: IMovie[],
     moviesToShow?: IMovie[],
     error?: Error,
-    searchString: string,
-    show1:boolean
-    show2:boolean
+    searchString: string
 }
 
-class MoviesList extends Component<RouteComponentProps, State> {
+type Props = {
+    moviesCategory : string
+}
+
+class MoviesList extends Component<RouteComponentProps<Props>, State> {
     state : State = {
         status: 'LOADING',
-        searchString:'',
-        show1:true,
-        show2:true
+        searchString:''
     };
     
     updateValue = (event : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> ) => {
@@ -72,7 +73,7 @@ class MoviesList extends Component<RouteComponentProps, State> {
     
 
     render() {
-        const { status, moviesToShow, error, searchString, show1, show2 } = this.state;
+        const { status, moviesToShow, error, searchString } = this.state;
 
         let el;
 
@@ -83,11 +84,19 @@ class MoviesList extends Component<RouteComponentProps, State> {
                 );
                 break;
             case 'ERROR':
-                el = (
-                    <Alert variant="danger">
-                        {error?.message}
-                    </Alert>
-                );
+                let msg = error?.message??'';
+
+                if (msg?.indexOf("404") > -1){
+                    el = (
+                        <NoMatch/>
+                    )
+                } else {
+                    el = (
+                        <Alert variant="danger">
+                            {error?.message}
+                        </Alert>
+                    )                
+                }
                 break;
             case 'LOADED':
                 el = (
@@ -104,7 +113,7 @@ class MoviesList extends Component<RouteComponentProps, State> {
                                 moviesToShow?.map(
                                     (movie, idx) => (
                                         <Col key={idx} className="d-flex align-items-stretch my-3">
-                                            <MovieListItem movie={movie} path={this.props.match.path} onRemove={this.removeMovieFromFavourite}/>
+                                            <MovieListItem movie={movie} path={this.props.match.params.moviesCategory} onRemove={this.removeMovieFromFavourite}/>
                                         </Col>
                                     )
                                 )
@@ -122,12 +131,22 @@ class MoviesList extends Component<RouteComponentProps, State> {
     }
 
     async componentDidMount() {
+        await this.reloadMovieList();
+    }
+
+    async componentDidUpdate(prevProps : RouteComponentProps<Props>){
+        if (this.props.match.params.moviesCategory !== prevProps.match.params.moviesCategory){
+            await this.reloadMovieList();
+        }
+    }
+
+    reloadMovieList = async() => {
         this.setState({
             status: 'LOADING'
         });
 
         try {
-            const movies = await getMovies(this.props.match.path);
+            const movies = await getMovies(this.props.match.params.moviesCategory);
             const moviesToShow = movies;
             this.setState({
                 status: 'LOADED',

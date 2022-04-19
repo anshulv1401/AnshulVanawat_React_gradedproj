@@ -14,7 +14,7 @@ type Props = {
 
 const MovieListItem = ( { movie, path, onRemove } : Props ) => {
     const toastTimeout = 2000;
-    const isFavouritePage = path === "/favourite";
+    const isFavouritePage = path === "favourite";
 
     const { id, title, storyline, ratings, posterurl } = movie;
 
@@ -28,15 +28,15 @@ const MovieListItem = ( { movie, path, onRemove } : Props ) => {
     const addMovieToFavourite = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         try {
-            const movieByTitle = await getMovieByTitle("/favourite", movie.title);
+            const movieByTitle = await getMovieByTitle("favourite", movie.title);
             if (movieByTitle !== null){
                 toast.error("Already added in favourite!", { autoClose: toastTimeout })
                 return;
             }
 
-            const highestId = await getHigestMovieId("/favourite");
+            const highestId = await getHigestMovieId("favourite");
             movie.id = highestId + 1;
-            await addMovie("/favourite", movie);
+            await addMovie("favourite", movie);
             toast.success("Successfully added in favourite!", { autoClose: toastTimeout })
         }
         catch (errormsg : any) {
@@ -50,7 +50,7 @@ const MovieListItem = ( { movie, path, onRemove } : Props ) => {
             if (movie.id === null){
                 toast.warn("Deletion of a movie without id not implemented");
             }
-            const data = await deleteMovieById("/favourite", movie.id);
+            const data = await deleteMovieById("favourite", movie.id);
             toast.success("Successfully removed from favourite!", { autoClose: toastTimeout })
             onRemove(movie.title);
         }
