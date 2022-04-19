@@ -66,12 +66,14 @@ const MovieListItem = ( { movie, path, onRemove } : Props ) => {
     }
 
     return (
-        <Card className="shadow-sm mb-5 bg-white rounded" style={{ width: '18rem' }} onClick={routeChange}>
-            <Card.Img variant="top" height={350} src={`${posterurl}`} alt={`${title} Movie Poster`}/>
-            <Card.Body>
+        <Card className="shadow-sm mb-5 bg-white rounded" style={{ width: '18rem' }}>
+            <Card.Img variant="top" height={350} src={`${posterurl}`} alt={`${title} Movie Poster`} onClick={routeChange}/>
+            <Card.Header className="text-md text-center font-weight-bold" onClick={routeChange}>
+                {title}
+            </Card.Header>
+            <Card.Body onClick={routeChange}>
                 <Card.Title className="d-flex justify-content-between">
                     <div className="text-xs">
-                        {title}
                         <div>
                             <Rating rating={rating}/>
                             {rating} ({ratings.length} rated)
@@ -83,9 +85,11 @@ const MovieListItem = ( { movie, path, onRemove } : Props ) => {
                         <strong>Story Line</strong>: {cardText}
                     </span>
                 </Card.Text>
+            </Card.Body>
+            <Card.Footer className="text-center">
                 <Button hidden={isFavouritePage} onClick={addMovieToFavourite} variant="primary">Add to favourite</Button>
                 <Button hidden={!isFavouritePage} onClick={removeMovieFromFavourite} variant="danger">Remove from favourite</Button>
-            </Card.Body>
+            </Card.Footer>
         </Card>
     );
 };

@@ -50,7 +50,7 @@ const MoviesDetails = (props : RouteComponentProps<Props>) =>{
                 break;
             }
             
-            const { title, storyline, ratings, posterurl, duration } = movie as IMovie;
+            const { title, storyline, ratings, posterurl, duration, releaseDate, contentRating, imdbRating, genres, actors} = movie as IMovie;
 
             if (title === null){
                 el = (
@@ -75,14 +75,37 @@ const MoviesDetails = (props : RouteComponentProps<Props>) =>{
                         </Col>
                         <Col xs={12} lg={8}>
                             <div className="fs-5 my-2 ">{storyline}</div>
-                            <Row xs={3} className="text-sm my-2">
+                            <Row xs={3} className="text-sm my-3 mb-5">
                                 <Col>
                                     <FontAwesomeIcon icon={faClock} />
-                                    <span className="ms-2">{duration}</span>
+                                    <span className="ms-2">Duration : {duration}</span>
                                 </Col>
                                 <Col>
                                     <Rating rating={rating}/>
                                     {rating} ({ratings.length} rated)
+                                </Col>
+                                <Col>
+                                    <span className="ms-2">Release Date : {releaseDate}</span>
+                                </Col>
+                            </Row>
+                            <Row xs={12} className="text-sm my-2">
+                                <Col>
+                                    <span className="ms-2">Imdb Rating : {imdbRating}</span>
+                                </Col>
+                            </Row>
+                            <Row xs={12} className="text-sm my-2">
+                                <Col>
+                                    <span className="ms-2">Content Rating : {contentRating}</span>
+                                </Col>
+                            </Row>
+                            <Row xs={12} className="text-sm my-2">
+                                <Col>
+                                    <span className="ms-2">Genres : {genres}</span>
+                                </Col>
+                            </Row>
+                            <Row xs={12} className="text-sm my-2">
+                                <Col>
+                                    <span className="ms-2">Actors : {actors}</span>
                                 </Col>
                             </Row>
                         </Col>
