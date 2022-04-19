@@ -60,8 +60,8 @@ const MovieListItem = ( { movie, path, onRemove } : Props ) => {
     };
 
     return (
-        <Card style={{ width: '18rem' }}>
-            <Card.Img variant="top" height={350} src={`${posterurl}`} />
+        <Card className="shadow-sm mb-5 bg-white rounded" style={{ width: '18rem' }}>
+            <Card.Img variant="top" height={350} src={`${posterurl}`} alt={`${title} Movie Poster`}/>
             <Card.Body>
                 <Card.Title className="d-flex justify-content-between">
                     <div className="text-xs">

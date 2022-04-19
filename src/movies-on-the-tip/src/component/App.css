@@ -9,3 +9,7 @@
 .text-lg {
   font-size: 2em;
 }
+
+.card:hover{
+  transform: scale(1.05);
+}

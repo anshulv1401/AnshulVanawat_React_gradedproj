@@ -7,6 +7,7 @@ import IMovie from "../../model/IMovie";
 import { getMovies } from "../../services/movies";
 import { LoadingStatus } from "../../utils/types";
 import LoadingIndicator from "../common/LoadingIndicator";
+import NoData from "../global/NoData";
 import NoMatch from "../global/NoMatch";
 import MovieListItem from "./MovieListItem";
 
@@ -99,28 +100,34 @@ class MoviesList extends Component<RouteComponentProps<Props>, State> {
                 }
                 break;
             case 'LOADED':
-                el = (
-                    <>
-                        <FontAwesomeIcon icon={faSearch} className="me-2" />    
-                        <input 
-                            placeholder='Search movie' 
-                            className='me-2' 
-                            value={searchString}
-                            onChange={this.updateValue}
-                        />
-                        <Row xs={2} md={3} lg={5}>
-                            {
-                                moviesToShow?.map(
-                                    (movie, idx) => (
-                                        <Col key={idx} className="d-flex align-items-stretch my-3">
-                                            <MovieListItem movie={movie} path={this.props.match.params.moviesCategory} onRemove={this.removeMovieFromFavourite}/>
-                                        </Col>
+                if (moviesToShow?.length??0 > 0){
+                    el = (
+                        <>
+                            <FontAwesomeIcon icon={faSearch} className="me-2" />    
+                            <input 
+                                placeholder='Search movie' 
+                                className='me-2' 
+                                value={searchString}
+                                onChange={this.updateValue}
+                            />
+                            <Row xs={2} md={3} lg={5}>
+                                {
+                                    moviesToShow?.map(
+                                        (movie, idx) => (
+                                            <Col key={idx} className="d-flex align-items-stretch my-3">
+                                                <MovieListItem movie={movie} path={this.props.match.params.moviesCategory} onRemove={this.removeMovieFromFavourite}/>
+                                            </Col>
+                                        )
                                     )
-                                )
-                            }
-                        </Row>
-                    </>
-                );
+                                }
+                            </Row>
+                        </>
+                    );
+                } else {
+                    el = (
+                        <NoData/>
+                    );
+                }
 
                 break;
             default:

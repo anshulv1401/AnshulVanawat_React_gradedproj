@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLink, faCode } from '@fortawesome/free-solid-svg-icons';
+import {  faCode } from '@fortawesome/free-solid-svg-icons';
 
 const About = () => {
     return (
